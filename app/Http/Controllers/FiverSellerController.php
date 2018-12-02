@@ -1,16 +1,22 @@
 <?php
 
 namespace App\Http\Controllers;
+use http\Env\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
-class FiverSellerController extends Controller {
-
-    public function index() {
-
+class FiverSellerController extends Controller
+{
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     */
+    public function index(Request $request, Response $response)
+    {
         $data = array();
         $data['allcat'] = DB::table('fiver_categories')->get();
         $data['allsubcat'] = DB::table('fiver_subcategories')->get();
@@ -20,12 +26,15 @@ class FiverSellerController extends Controller {
         return view("fiver_seller_post", $data);
     }
 
-    public function insert(Request $request) {
-
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function insert(Request $request)
+    {
 
         $ext = "";
         $picture = $request["picture"];
-
         if ($picture) {
                  $ext=strtolower($picture->getClientOriginalExtension());
 
@@ -44,19 +53,17 @@ class FiverSellerController extends Controller {
             "product_type_id" =>$request->input("product"),
             "delivery_duratin_id" =>$request->input("delivery"),
             "users_id" =>$request->input("users_id"),
-              "date"=>$request->input("mydate"),
+            "date"=>$request->input("mydate"),
             "selling_price" =>$request->input("price"),
             "file_upload"=>$ext,
         );
         $id = DB::table("fiver_sellers")->insertGetId($arr);
-        
         if($id){
              if($ext) {
                 $picture = $request->file("picture");
                 $picture->move("public/seller_images","$id.$ext");
             }
          return redirect('fiver_seller_post');  
-         
         }
     }
     public function view(){

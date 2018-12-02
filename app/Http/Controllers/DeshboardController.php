@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 
 class DeshboardController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $data=[];
         $data['Type']=Auth::users()->type;
         return view('deshboard',$data);

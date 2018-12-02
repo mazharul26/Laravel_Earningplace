@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -10,32 +11,41 @@ use Illuminate\Support\Facades\File;
 
 class Fiverr_categoryController extends Controller
 {
-    public function index(){
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     */
+    public function index(Request $request, Response $response)
+    {
         return view('fiver_category');
     }
-       public function view(){
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     */
+
+    public function view(Request $request, Response $response)
+    {
         $data = array();
         $data['allcat'] = DB::table('fiver_categories')->get();
         return view("fiver_category", $data);
-        
-//        $data=[];
-//        $data['subcat']=DB::table('fiver_subcategory')->get();
-//        return view('fiver_subcategory');
-        
     }
-    public function insert(Request $request) {
-        $validatedData = request()->validate(
-                [
-                    'name' => 'required',
-                  
-        ]);
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     */
+    public function insert(Request $request, Response $response)
+    {
+        $validatedData = request()->validate(['name' => 'required']);
         $arr = array(
             "name" => $request->input("name"),
-            
         );
         DB::table("fiver_categories")->insert($arr);
-       // $id = DB::table("products")->insertGetId($arr);
-        return redirect('fiver_category');     
+        return redirect('fiver_category');
     }
 }

@@ -1,13 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+use http\Env\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
-class FiverGigsPrissingController extends Controller {
+class FiverGigsPrissingController extends Controller
+{
 
     public function index() {
         $data = array();
@@ -16,38 +18,23 @@ class FiverGigsPrissingController extends Controller {
         return view("fiver_gigs_prissing", $data);
     }
 
-    public function insert(Request $request) {
-//        $validatedData = request()->validate(
-//                [
-//                    'basic_title' => 'required',
-//                    'delivery_id' => 'required',
-//                    'page_number' => 'required',
-//                    'picture' => 'required',
-//                    'customization' => 'required',
-//                    'transmition' => 'required',
-//                    'upload' => 'required',
-//                    'product' => 'required',
-//                    'product_number' => 'required',
-//                    'price' => 'required',
-//        ]);
+    /**
+     * @param Request $request
+     * @return mixed
+     */
 
-
+    public function insert(Request $request, Response $response)
+    {
         $ext = "";
         $picture = $request["picture"];
-
         if ($picture) {
                  $ext = strtolower($picture->getClientOriginalExtension());
-
-            if ($ext != 'jpg' && $ext !='png' && $ext !='jpeg' && $ext !='gif'){
+                 if ($ext != 'jpg' && $ext !='png' && $ext !='jpeg' && $ext !='gif'){
                 $ext = "";
             }
         } else {
             $ext = "";
         }
-
-
-
-
         $arr = array(
             "basic_title" => $request->input("basic_title"),
             "delivery_id" => $request->input("delivery_id"),
@@ -61,20 +48,15 @@ class FiverGigsPrissingController extends Controller {
             "picture"=> $ext,
         );
 
-//     dd($request);
-//        die();
         $id = DB::table("fiver_gigs_prissings")->insertGetId($arr);
         if($id){
           $str = $request->input("gigs_description");
-             Storage::put("files1/$id.txt", $str);
+                 Storage::put("files1/$id.txt", $str);
          if($ext) {
                 $picture = $request->file("picture");
                 $picture->move("public/images1","$id.$ext");
             }
-            
-        return redirect('fiver_gigs_prissing');
-        
+            return redirect('fiver_gigs_prissing');
         }
     }
-
 }

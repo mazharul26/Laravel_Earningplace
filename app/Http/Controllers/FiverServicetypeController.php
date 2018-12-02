@@ -21,18 +21,19 @@ class FiverServicetypeController extends Controller {
         return view('fiver_service', $data);
     }
 
-    public function insert(Request $request) {
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function insert(Request $request)
+    {
         $validatedData = request()->validate(
-                [
-                    'service_name' => 'required',
-        ]);
+                ['service_name' => 'required']);
         $arr = array(
             "service_name" => $request->input("service_name"),
-            "subcategories_id" => $request->input("subcategory_name"),
-        );
+            "subcategories_id" => $request->input("subcategory_name")
+           );
         DB::table("fiver_servicetypes")->insert($arr);
-
         return redirect('fiver_service');
     }
-
 }
