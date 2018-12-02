@@ -30,9 +30,9 @@ class FiverSubcategoryController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function insert(Request $request) {
-        $validatedData = request()->validate(
-                ['subcat_name' => 'required']);
+    public function insert(Request $request)
+    {
+        $validatedData = request()->validate(['subcat_name' => 'required']);
         $arr = array(
             "subcat_name" => $request->input("subcat_name"),
             "categories_id" => $request->input("category_name"),
